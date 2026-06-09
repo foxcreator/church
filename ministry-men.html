@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Чоловічі зустрічі — Ковчег</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600;700;800&family=Manrope:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
+<style>
+  .min-hero {
+    min-height:60vh; padding:160px 48px 80px;
+    position:relative; overflow:hidden;
+    display:flex; align-items:flex-end;
+    border-bottom:1px solid var(--line);
+  }
+  .min-hero-photo {
+    position:absolute; inset:0; z-index:0;
+  }
+  .min-hero-overlay {
+    position:absolute; inset:0;
+    background:linear-gradient(to bottom, rgba(12,12,12,.45) 0%, rgba(12,12,12,.7) 55%, rgba(12,12,12,1) 100%);
+    z-index:1;
+  }
+  .min-hero::before {
+    content:'';
+    position:absolute; top:-200px; left:50%; transform:translateX(-50%);
+    width:900px; height:700px;
+    background:radial-gradient(circle, rgba(204,139,46,.07) 0%, transparent 65%);
+    pointer-events:none; z-index:0;
+  }
+  .min-hero-inner {
+    max-width:1360px; margin:0 auto; width:100%;
+    position:relative; z-index:2;
+  }
+  .min-hero h1 {
+    font-family:'Unbounded',sans-serif; font-weight:500;
+    font-size:clamp(48px,8vw,110px);
+    line-height:.93; letter-spacing:-.04em; margin-top:20px;
+  }
+  .min-hero-sub {
+    font-size:19px; color:var(--ink-soft); max-width:560px; margin-top:20px; line-height:1.65;
+  }
+
+  /* Main layout */
+  .min-body { padding:100px 48px; }
+  .min-body-inner {
+    max-width:1360px; margin:0 auto;
+    display:grid; grid-template-columns:1fr 340px; gap:80px; align-items:start;
+  }
+
+  /* Desc items */
+  .desc-list { display:grid; gap:0; }
+  .desc-item {
+    padding:36px 0; border-bottom:1px solid var(--line);
+  }
+  .desc-item:first-child { border-top:1px solid var(--line); }
+  .desc-item h3 {
+    font-family:'Unbounded',sans-serif; font-weight:500;
+    font-size:20px; margin-bottom:12px; letter-spacing:-.01em;
+  }
+  .desc-item p { font-size:16px; color:var(--ink-soft); line-height:1.7; }
+
+  /* Sidebar */
+  .min-sidebar { position:sticky; top:100px; }
+  .sidebar-card {
+    background:var(--bg-card); border:1px solid var(--line);
+    border-radius:var(--r); padding:32px;
+    border-top:2px solid var(--amber); margin-bottom:20px;
+  }
+  .sidebar-card h4 {
+    font-family:'Unbounded',sans-serif; font-size:10px;
+    letter-spacing:3px; text-transform:uppercase; color:var(--amber);
+    margin-bottom:20px; font-weight:600;
+    display:flex; align-items:center; gap:10px;
+  }
+  .sidebar-card h4::before { content:''; width:16px; height:1px; background:var(--amber); }
+  .when-row {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:12px 0; border-bottom:1px solid var(--line); gap:12px;
+  }
+  .when-row:last-child { border-bottom:none; }
+  .when-key { font-size:12px; color:var(--ink-mute); }
+  .when-val { font-family:'Unbounded',sans-serif; font-size:13px; font-weight:500; text-align:right; }
+
+  /* Breadcrumb */
+  .breadcrumb {
+    font-family:'Unbounded',sans-serif; font-size:10px;
+    letter-spacing:2px; text-transform:uppercase; color:var(--ink-mute);
+    margin-bottom:20px; display:flex; gap:10px; align-items:center;
+  }
+  .breadcrumb a { color:var(--ink-mute); text-decoration:none; transition:color .2s; }
+  .breadcrumb a:hover { color:var(--amber); }
+  .breadcrumb span { color:var(--line-b); }
+
+  /* Other ministries */
+  .other-min { margin-top:40px; }
+  .other-min h4 {
+    font-family:'Unbounded',sans-serif; font-size:10px;
+    letter-spacing:3px; text-transform:uppercase; color:var(--amber);
+    margin-bottom:16px; font-weight:600;
+    display:flex; align-items:center; gap:10px;
+  }
+  .other-min h4::before { content:''; width:16px; height:1px; background:var(--amber); }
+  .other-link {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 0; border-bottom:1px solid var(--line);
+    text-decoration:none; color:var(--ink-soft); font-size:13px;
+    transition:color .2s;
+  }
+  .other-link:hover { color:var(--amber); }
+  .other-link span { font-size:16px; }
+
+  @media (max-width:960px) {
+    .min-hero { padding:120px 20px 60px; }
+    .min-body { padding:60px 20px; }
+    .min-body-inner { grid-template-columns:1fr; }
+    .min-sidebar { position:static; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">
+    <div class="logo-mark">К</div>
+    <span>Церква Ковчег</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#ministries" class="active">Служіння</a></li>
+    <li><a href="sermons.html">Проповіді</a></li>
+    <li><a href="visit.html">Я тут вперше</a></li>
+    <li><a href="contact.html">Контакти</a></li>
+    <li><a href="#" class="nav-cta"><span class="live-dot"></span>&nbsp;Наживо</a></li>
+  </ul>
+  <button class="nav-toggle" onclick="this.closest('nav').classList.toggle('open')" aria-label="Меню">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<section class="min-hero">
+
+  <div class="min-hero-inner">
+    <div class="breadcrumb">
+      <a href="index.html#ministries">Служіння</a>
+      <span>/</span>
+      <span>Для чоловіків</span>
+    </div>
+    <div class="section-label">Щомісяця</div>
+    <h1 class="ub">Чоловічі<br>зустрічі</h1>
+    <p class="min-hero-sub">Незвичне явище — бачити чоловіка, що читає справжню книгу. Для чоловіків Ковчегу читання — це стиль життя.</p>
+  </div>
+</section>
+
+<section class="min-body">
+  <div class="min-body-inner">
+    <div>
+      <div class="verse-block" style="margin-bottom:48px">
+        <blockquote>«Будьте пильні, стійте у вірі, будьте мужні, будьте міцні.»</blockquote>
+        <cite>1 Коринтян 16:13</cite>
+      </div>
+      <div class="desc-list">
+    <div class="desc-item">
+      <h3>Про служіння</h3>
+      <p>Незвичне явище в наші дні бачити чоловіка читаючого справжню книгу. А для чоловіків Ковчега читання християнських книг — це стиль життя.</p>
+    </div>
+    <div class="desc-item">
+      <h3>Книга за книгою</h3>
+      <p>Книгу за книгою ми читаємо, обговорюємо і застосовуємо, щоб змінюватися самим і приводити свої сім'ї до Христа.</p>
+    </div>
+    <div class="desc-item">
+      <h3>Братська спільнота</h3>
+      <p>Чоловіча дружба, взаємна підтримка, молитва одне за одного. Бути чоловіком по-Божому — це справжнє покликання.</p>
+    </div>
+    <div class="desc-item">
+      <h3>Долучитися</h3>
+      <p>Якщо ти чоловік, який шукає братства і хоче рости у вірі — приходь. Тут тебе чекають.</p>
+    </div>
+      </div>
+
+    </div>
+
+    <aside class="min-sidebar">
+      <div class="sidebar-card">
+        <h4>Коли і де</h4>
+      <div class="when-row">
+        <span class="when-key">Раз на місяць</span>
+        <span class="when-val">час уточнюйте</span>
+      </div>
+      <div class="when-row">
+        <span class="when-key">Вік</span>
+        <span class="when-val">Будь-який</span>
+      </div>
+      <div class="when-row">
+        <span class="when-key">Де</span>
+        <span class="when-val">Донецьке шосе, 19</span>
+      </div>
+      </div>
+
+      <a href="contact.html" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:12px">Написати нам →</a>
+      <a href="visit.html" class="btn btn-outline" style="width:100%;justify-content:center">Я тут вперше</a>
+
+      <div class="other-min">
+        <h4>Інші служіння</h4>
+        <a href="ministry-sunday.html" class="other-link">Недільне богослужіння <span>→</span></a>
+        <a href="ministry-teen.html" class="other-link">Teen Club <span>→</span></a>
+        <a href="ministry-reverse.html" class="other-link">Reverse <span>→</span></a>
+        <a href="ministry-women.html" class="other-link">Жіночі зустрічі <span>→</span></a>
+        <a href="ministry-men.html" class="other-link">Чоловічі зустрічі <span>→</span></a>
+        <a href="ministry-kids.html" class="other-link">Недільна школа <span>→</span></a>
+        <a href="ministry-sport.html" class="other-link">Sport-Community <span>→</span></a>
+        <a href="ministry-rehab.html" class="other-link">Реабцентр <span>→</span></a>
+        <a href="ministry-music.html" class="other-link">Музичні альбоми <span>→</span></a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-sign">
+      <div class="footer-sign-big ub">ІСУС</div>
+      <p class="footer-sign-verse">«Бо де двоє чи троє в Ім'я Моє зібрані — там Я серед них.»</p>
+      <div class="footer-sign-ref">Матвія 18:20</div>
+    </div>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="logo"><div class="logo-mark">К</div><span>Церква Ковчег</span></a>
+        <p>Євангельська церква в Дніпрі. З 1992 року — поряд з тими, хто шукає.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Служіння</h4>
+        <ul>
+          <li><a href="ministry-sunday.html">Недільне богослужіння</a></li>
+          <li><a href="ministry-teen.html">Teen Club</a></li>
+          <li><a href="ministry-reverse.html">Reverse</a></li>
+          <li><a href="ministry-women.html">Жіночі зустрічі</a></li>
+          <li><a href="ministry-men.html">Чоловічі зустрічі</a></li>
+          <li><a href="ministry-kids.html">Недільна школа</a></li>
+          <li><a href="ministry-sport.html">Sport-Community</a></li>
+          <li><a href="ministry-rehab.html">Реабцентр</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Контент</h4>
+        <ul>
+          <li><a href="sermons.html">Архів проповідей</a></li>
+          <li><a href="ministry-music.html">Музичні альбоми</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Прийти</h4>
+        <ul>
+          <li><a href="visit.html">Я тут вперше</a></li>
+          <li><a href="index.html#donate">Підтримати</a></li>
+          <li><a href="contact.html">Контакти</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 · Церква «Ковчег» · Дніпро, Україна</span>
+      <span>Зроблено з любов'ю</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

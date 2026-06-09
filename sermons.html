@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Проповіді — Церква Ковчег, Дніпро</title>
+<meta name="description" content="Архів проповідей церкви Ковчег. Слухайте та дивіться записи недільних богослужінь.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600;700;800&family=Manrope:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
+<style>
+  /* ─── PAGE HERO photo override ─── */
+  .page-hero { background:var(--bg-warm); }
+
+  /* ─── FILTER BAR ─── */
+  .filter-bar {
+    background:var(--bg-warm);
+    border-bottom:1px solid var(--line);
+    padding:0 48px;
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+    position:sticky; top:67px; z-index:90;
+  }
+  .filter-bar-inner {
+    max-width:1360px; margin:0 auto; width:100%;
+    display:flex; gap:12px; align-items:center;
+    padding:18px 0; flex-wrap:wrap;
+  }
+  .filter-select {
+    background:var(--bg-card); border:1px solid var(--line-b);
+    color:var(--ink-soft); border-radius:4px;
+    padding:10px 16px;
+    font-family:'Unbounded',sans-serif; font-size:10px;
+    letter-spacing:1.5px; text-transform:uppercase;
+    cursor:pointer; transition:border-color .2s;
+    appearance:none; -webkit-appearance:none;
+    padding-right:32px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23635D57' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 12px center;
+  }
+  .filter-select:focus { outline:none; border-color:var(--amber); }
+  .search-wrap {
+    flex:1; min-width:200px; position:relative;
+  }
+  .search-input {
+    width:100%; background:var(--bg-card); border:1px solid var(--line);
+    color:var(--ink); border-radius:4px;
+    padding:10px 16px 10px 40px;
+    font-family:'Manrope',sans-serif; font-size:14px;
+    transition:border-color .2s;
+  }
+  .search-input::placeholder { color:var(--ink-mute); }
+  .search-input:focus { outline:none; border-color:var(--amber); }
+  .search-icon {
+    position:absolute; left:14px; top:50%; transform:translateY(-50%);
+    color:var(--ink-mute); font-size:14px; pointer-events:none;
+  }
+  .filter-count {
+    font-family:'Unbounded',sans-serif; font-size:10px;
+    letter-spacing:2px; color:var(--ink-mute);
+    margin-left:auto;
+  }
+
+  /* ─── SERMONS SECTION ─── */
+  .sermons-page { padding:80px 48px 140px; }
+  .sermons-page-inner { max-width:1360px; margin:0 auto; }
+
+  /* Featured sermon */
+  .featured-sermon {
+    display:grid; grid-template-columns:1.4fr 1fr;
+    gap:0; border-radius:var(--r); overflow:hidden;
+    border:1px solid var(--line-b); margin-bottom:60px;
+    cursor:pointer; transition:border-color .3s;
+  }
+  .featured-sermon:hover { border-color:var(--amber); }
+  .featured-thumb {
+    aspect-ratio:16/9; position:relative; overflow:hidden;
+    background:radial-gradient(ellipse at center top, rgba(204,139,46,.3), transparent 60%),
+      linear-gradient(180deg, #241a0f 0%, #0d0806 100%);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .featured-thumb .play-btn {
+    width:80px; height:80px; background:var(--amber);
+    border-radius:50%; display:flex; align-items:center; justify-content:center;
+    transition:all .3s; z-index:2; position:relative;
+  }
+  .featured-sermon:hover .play-btn { transform:scale(1.1); box-shadow:0 0 48px var(--amber-g); }
+  .play-btn::after {
+    content:''; width:0; height:0;
+    border-left:20px solid var(--bg);
+    border-top:13px solid transparent;
+    border-bottom:13px solid transparent;
+    margin-left:4px;
+  }
+  .featured-sermon .sermon-series-tag {
+    position:absolute; top:20px; left:20px;
+    font-family:'Unbounded',sans-serif; font-size:9px;
+    letter-spacing:2px; text-transform:uppercase;
+    background:rgba(12,12,12,.75); backdrop-filter:blur(8px);
+    padding:6px 14px; border-radius:100px; color:var(--amber); font-weight:600;
+  }
+  .featured-sermon .duration-tag {
+    position:absolute; top:20px; right:20px;
+    font-family:'Unbounded',sans-serif; font-size:9px;
+    letter-spacing:1.5px; color:var(--ink-soft);
+    background:rgba(12,12,12,.75); backdrop-filter:blur(8px);
+    padding:6px 14px; border-radius:100px;
+  }
+  .featured-info {
+    background:var(--bg-card); padding:48px;
+    display:flex; flex-direction:column; justify-content:center;
+  }
+  .featured-badge {
+    font-family:'Unbounded',sans-serif; font-size:10px;
+    letter-spacing:3px; text-transform:uppercase;
+    color:var(--amber); margin-bottom:20px; font-weight:600;
+    display:flex; align-items:center; gap:10px;
+  }
+  .featured-badge::before { content:''; width:20px; height:1px; background:var(--amber); }
+  .featured-info h2 {
+    font-family:'Unbounded',sans-serif; font-weight:500;
+    font-size:clamp(22px,3vw,38px); line-height:1.1;
+    margin-bottom:16px; letter-spacing:-.02em;
+  }
+  .featured-info .sermon-desc {
+    font-size:15px; color:var(--ink-soft); line-height:1.65;
+    margin-bottom:28px;
+  }
+  .featured-meta {
+    font-family:'Unbounded',sans-serif; font-size:10px;
+    letter-spacing:2px; text-transform:uppercase;
+    color:var(--ink-mute); display:flex; gap:20px; flex-wrap:wrap;
+  }
+
+  /* Sermon grid */
+  .sermon-grid-page {
+    display:grid; grid-template-columns:repeat(3,1fr); gap:18px;
+    margin-bottom:48px;
+  }
+  .sermon-card {
+    background:var(--bg-card); border:1px solid var(--line);
+    border-radius:var(--r); overflow:hidden; cursor:pointer;
+    transition:all .3s;
+  }
+  .sermon-card:hover { transform:translateY(-4px); border-color:var(--line-b); }
+  .sermon-card-thumb {
+    aspect-ratio:16/9; position:relative;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  .sermon-card .play-sm {
+    width:48px; height:48px; background:rgba(204,139,46,.9);
+    border-radius:50%; display:flex; align-items:center; justify-content:center;
+    transition:all .3s; z-index:2; position:relative;
+  }
+  .sermon-card:hover .play-sm { transform:scale(1.15); background:var(--amber); }
+  .play-sm::after {
+    content:''; width:0; height:0;
+    border-left:14px solid var(--bg);
+    border-top:9px solid transparent;
+    border-bottom:9px solid transparent;
+    margin-left:3px;
+  }
+  .sermon-card-body { padding:24px; }
+  .sermon-card-meta {
+    display:flex; justify-content:space-between; margin-bottom:10px;
+  }
+  .sermon-card-date {
+    font-family:'Unbounded',sans-serif; font-size:10px;
+    text-transform:uppercase; letter-spacing:2px; color:var(--amber);
+  }
+  .sermon-card-dur {
+    font-family:'Unbounded',sans-serif; font-size:10px;
+    letter-spacing:1.5px; color:var(--ink-mute);
+  }
+  .sermon-card h3 {
+    font-family:'Unbounded',sans-serif; font-weight:500;
+    font-size:17px; line-height:1.2; margin-bottom:8px;
+    letter-spacing:-.01em;
+  }
+  .sermon-card-author { font-size:12px; color:var(--ink-mute); }
+  .sermon-card-series {
+    margin-top:16px; padding-top:16px; border-top:1px solid var(--line);
+    font-family:'Unbounded',sans-serif; font-size:10px;
+    letter-spacing:2px; text-transform:uppercase; color:var(--ink-soft);
+  }
+
+  /* Thumbnail gradient variations */
+  .th-1 { background:radial-gradient(ellipse at 30% 40%, rgba(204,139,46,.25), transparent 60%), linear-gradient(135deg, #221a0a 0%, #0d0906 100%); }
+  .th-2 { background:radial-gradient(ellipse at 70% 60%, rgba(200,89,58,.2), transparent 60%), linear-gradient(135deg, #1e0f09 0%, #0a0604 100%); }
+  .th-3 { background:radial-gradient(ellipse at 50% 30%, rgba(204,139,46,.2), transparent 60%), linear-gradient(180deg, #1a1410 0%, #080706 100%); }
+  .th-4 { background:radial-gradient(ellipse at 20% 50%, rgba(200,89,58,.18), transparent 60%), linear-gradient(135deg, #1c0e0b 0%, #090605 100%); }
+  .th-5 { background:radial-gradient(ellipse at 80% 30%, rgba(204,139,46,.22), transparent 60%), linear-gradient(135deg, #1f1a0c 0%, #0c0905 100%); }
+  .th-6 { background:radial-gradient(ellipse at 50% 70%, rgba(200,89,58,.15), transparent 60%), linear-gradient(180deg, #1b1108 0%, #090706 100%); }
+  .th-7 { background:radial-gradient(ellipse at 40% 40%, rgba(204,139,46,.2), transparent 55%), linear-gradient(135deg, #201608 0%, #0b0805 100%); }
+  .th-8 { background:radial-gradient(ellipse at 60% 50%, rgba(200,89,58,.18), transparent 60%), linear-gradient(135deg, #1d1009 0%, #0a0705 100%); }
+  .th-9 { background:radial-gradient(ellipse at 30% 60%, rgba(204,139,46,.18), transparent 60%), linear-gradient(180deg, #1e1b0e 0%, #0d0b06 100%); }
+
+  /* Series row */
+  .series-section { margin-top:80px; }
+  .series-section h2 {
+    font-family:'Unbounded',sans-serif; font-weight:500;
+    font-size:32px; letter-spacing:-.02em;
+    margin-bottom:8px;
+  }
+  .series-section p {
+    color:var(--ink-soft); margin-bottom:40px; font-size:15px;
+  }
+  .series-grid {
+    display:grid; grid-template-columns:repeat(4,1fr); gap:16px;
+  }
+  .series-card {
+    background:var(--bg-card); border:1px solid var(--line);
+    border-radius:var(--r); padding:28px 24px;
+    cursor:pointer; transition:all .3s;
+    border-top:2px solid transparent;
+  }
+  .series-card:hover { background:var(--bg-card-2); border-top-color:var(--amber); }
+  .series-count {
+    font-family:'Unbounded',sans-serif; font-size:10px;
+    letter-spacing:2px; text-transform:uppercase; color:var(--amber);
+    margin-bottom:12px; font-weight:600;
+  }
+  .series-card h3 {
+    font-family:'Unbounded',sans-serif; font-weight:500;
+    font-size:18px; margin-bottom:8px; letter-spacing:-.01em;
+  }
+  .series-card p { font-size:12px; color:var(--ink-mute); line-height:1.5; }
+
+  /* YouTube note */
+  .yt-note {
+    background:var(--bg-card); border:1px solid var(--line);
+    border-radius:var(--r); padding:20px 28px;
+    margin-bottom:32px;
+    display:flex; align-items:center; gap:16px;
+  }
+  .yt-note-icon { font-size:20px; flex-shrink:0; }
+  .yt-note-text {
+    font-size:13px; color:var(--ink-soft); line-height:1.5;
+  }
+  .yt-note-text a { color:var(--amber); text-decoration:none; }
+  .yt-note-text a:hover { text-decoration:underline; }
+
+  /* Pagination */
+  .pagination {
+    display:flex; gap:8px; justify-content:center; margin-top:48px;
+  }
+  .page-btn {
+    width:40px; height:40px;
+    background:var(--bg-card); border:1px solid var(--line);
+    border-radius:4px; cursor:pointer; transition:all .2s;
+    font-family:'Unbounded',sans-serif; font-size:12px; color:var(--ink-soft);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .page-btn.active { background:var(--amber); color:var(--bg); border-color:var(--amber); }
+  .page-btn:hover:not(.active) { border-color:var(--amber); color:var(--amber); }
+
+  /* Mobile */
+  @media (max-width:960px) {
+    .filter-bar { padding:0 20px; }
+    .sermons-page { padding:48px 20px 80px; }
+    .featured-sermon { grid-template-columns:1fr; }
+    .sermon-grid-page { grid-template-columns:1fr; }
+    .series-grid { grid-template-columns:1fr 1fr; }
+    .featured-info { padding:28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo">
+    <div class="logo-mark">К</div>
+    <span>Церква Ковчег</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#ministries">Служіння</a></li>
+    <li><a href="sermons.html" class="active">Проповіді</a></li>
+    <li><a href="visit.html">Я тут вперше</a></li>
+    <li><a href="contact.html">Контакти</a></li>
+    <li><a href="https://www.youtube.com/channel/UCPdTXPOZU_3nepXF5SRjQgQ" target="_blank" class="nav-cta"><span class="live-dot"></span>&nbsp;Наживо</a></li>
+  </ul>
+  <button class="nav-toggle" onclick="this.closest('nav').classList.toggle('open')" aria-label="Меню">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <div class="section-label">Слово Боже</div>
+    <h1 class="ub">
+      Проповіді<br>
+      <span class="light">і Навчання</span>
+    </h1>
+    <p class="page-hero-sub">
+      «Віра — від слухання, а слухання — через Слово Христа.»
+      <br><span style="font-family:'Unbounded',sans-serif;font-size:11px;letter-spacing:2px;color:var(--amber);font-weight:600;text-transform:uppercase;margin-top:10px;display:block">Римлян 10:17</span>
+    </p>
+  </div>
+</section>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-bar-inner">
+    <select class="filter-select" id="filterSeries">
+      <option value="">Всі серії</option>
+    </select>
+    <select class="filter-select" id="filterSpeaker">
+      <option value="">Всі проповідники</option>
+    </select>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" type="text" placeholder="Пошук по темі або тексту..." id="searchInput">
+    </div>
+    <span class="filter-count" id="sermonCount">9 проповідей</span>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<section class="sermons-page">
+  <div class="sermons-page-inner">
+
+    <!-- YouTube channel note -->
+    <div class="yt-note">
+      <div class="yt-note-icon">▶️</div>
+      <div class="yt-note-text">
+        Всі відео автоматично завантажуються з нашого
+        <a href="https://www.youtube.com/channel/UCPdTXPOZU_3nepXF5SRjQgQ" target="_blank">YouTube-каналу</a>.
+        Підпишіться, щоб не пропускати нові проповіді.
+      </div>
+    </div>
+
+    <!-- FEATURED (latest sermon) -->
+    <div class="featured-sermon" onclick="window.open('https://www.youtube.com/channel/UCPdTXPOZU_3nepXF5SRjQgQ','_blank')">
+      <div class="featured-thumb">
+        <span class="sermon-series-tag">Остання проповідь</span>
+        
+        <div class="play-btn"></div>
+      </div>
+      <div class="featured-info">
+        <div class="featured-badge">Остання проповідь</div>
+        <h2>Дивитись на YouTube →</h2>
+        <p class="sermon-desc">Всі проповіді доступні на YouTube-каналі церкви. Підпишіться, щоб не пропускати нові.</p>
+        <div class="featured-meta"><span>youtube.com/kovchegdnepr</span></div>
+      </div>
+    </div>
+
+    <!-- SERMON GRID -->
+    <div class="sermon-grid-page" id="sermonGrid">
+
+      <div class="sermon-card" data-series="" data-speaker="" data-title="Проповідь 1">
+        <div class="sermon-card-thumb th-1">
+          <div class="play-sm"></div>
+        </div>
+        <div class="sermon-card-body">
+          <div class="sermon-card-meta">
+            <span class="sermon-card-date">— —</span>
+          </div>
+          <h3>Проповідь 1</h3>
+          <div class="sermon-card-author">— —</div>
+        </div>
+      </div>
+
+      <div class="sermon-card" data-series="" data-speaker="" data-title="Проповідь 2">
+        <div class="sermon-card-thumb th-2">
+          <div class="play-sm"></div>
+        </div>
+        <div class="sermon-card-body">
+          <div class="sermon-card-meta">
+            <span class="sermon-card-date">— —</span>
+          </div>
+          <h3>Проповідь 2</h3>
+          <div class="sermon-card-author">— —</div>
+        </div>
+      </div>
+
+      <div class="sermon-card" data-series="" data-speaker="" data-title="Проповідь 3">
+        <div class="sermon-card-thumb th-3">
+          <div class="play-sm"></div>
+        </div>
+        <div class="sermon-card-body">
+          <div class="sermon-card-meta">
+            <span class="sermon-card-date">— —</span>
+          </div>
+          <h3>Проповідь 3</h3>
+          <div class="sermon-card-author">— —</div>
+        </div>
+      </div>
+
+      <div class="sermon-card" data-series="" data-speaker="" data-title="Проповідь 4">
+        <div class="sermon-card-thumb th-4">
+          <div class="play-sm"></div>
+        </div>
+        <div class="sermon-card-body">
+          <div class="sermon-card-meta">
+            <span class="sermon-card-date">— —</span>
+          </div>
+          <h3>Проповідь 4</h3>
+          <div class="sermon-card-author">— —</div>
+        </div>
+      </div>
+
+      <div class="sermon-card" data-series="" data-speaker="" data-title="Проповідь 5">
+        <div class="sermon-card-thumb th-5">
+          <div class="play-sm"></div>
+        </div>
+        <div class="sermon-card-body">
+          <div class="sermon-card-meta">
+            <span class="sermon-card-date">— —</span>
+          </div>
+          <h3>Проповідь 5</h3>
+          <div class="sermon-card-author">— —</div>
+        </div>
+      </div>
+
+      <div class="sermon-card" data-series="" data-speaker="" data-title="Проповідь 6">
+        <div class="sermon-card-thumb th-6">
+          <div class="play-sm"></div>
+        </div>
+        <div class="sermon-card-body">
+          <div class="sermon-card-meta">
+            <span class="sermon-card-date">— —</span>
+          </div>
+          <h3>Проповідь 6</h3>
+          <div class="sermon-card-author">— —</div>
+        </div>
+      </div>
+
+    </div><!-- /sermon-grid-page -->
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <div class="page-btn active">1</div>
+      <div class="page-btn">2</div>
+      <div class="page-btn">3</div>
+      <div class="page-btn">→</div>
+    </div>
+
+    <!-- SERIES -->
+    <div class="series-section">
+      <div class="section-label" style="margin-bottom:20px">Серії</div>
+      <h2 class="ub">Навчальні серії</h2>
+      <p>Глибокі розбори цілих книг і тем Писання</p>
+      <div class="series-grid">
+        <div class="series-card">
+          <div class="series-count">— проповідей</div>
+          <h3>Серія 1</h3>
+          <p>Буде заповнено адміном</p>
+        </div>
+        <div class="series-card">
+          <div class="series-count">— проповідей</div>
+          <h3>Серія 2</h3>
+          <p>Буде заповнено адміном</p>
+        </div>
+        <div class="series-card">
+          <div class="series-count">— проповідей</div>
+          <h3>Серія 3</h3>
+          <p>Буде заповнено адміном</p>
+        </div>
+        <div class="series-card">
+          <div class="series-count">— проповідей</div>
+          <h3>Серія 4</h3>
+          <p>Буде заповнено адміном</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-sign">
+      <div class="footer-sign-big ub">ІСУС</div>
+      <p class="footer-sign-verse">«Бо де двоє чи троє в Ім'я Моє зібрані — там Я серед них.»</p>
+      <div class="footer-sign-ref">Матвія 18:20</div>
+    </div>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <div class="logo-mark">К</div>
+          <span>Церква Ковчег</span>
+        </a>
+        <p>Євангельська церква в Дніпрі. З 1992 року — поряд з тими, хто шукає.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Служіння</h4>
+        <ul>
+          <li><a href="index.html#ministries">Недільне богослужіння</a></li>
+          <li><a href="index.html#ministries">Teen Club</a></li>
+          <li><a href="index.html#ministries">Reverse</a></li>
+          <li><a href="index.html#ministries">Жіночі зустрічі</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Контент</h4>
+        <ul>
+          <li><a href="sermons.html">Архів проповідей</a></li>
+          <li><a href="#">Музичні альбоми</a></li>
+          <li><a href="#">Реабцентр</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Прийти</h4>
+        <ul>
+          <li><a href="index.html#first-time">Я тут вперше</a></li>
+          <li><a href="give.html">Підтримати</a></li>
+          <li><a href="contact.html">Контакти</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 · Церква «Ковчег» · Дніпро, Україна</span>
+      <span>Зроблено з любов'ю</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Simple filter
+  const cards = document.querySelectorAll('.sermon-card');
+  const count = document.getElementById('sermonCount');
+  function filterSermons() {
+    const series = document.getElementById('filterSeries').value;
+    const speaker = document.getElementById('filterSpeaker').value;
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    let visible = 0;
+    cards.forEach(c => {
+      const matchSeries = !series || c.dataset.series === series;
+      const matchSpeaker = !speaker || c.dataset.speaker === speaker;
+      const matchQ = !q || c.dataset.title.toLowerCase().includes(q) || c.dataset.speaker.toLowerCase().includes(q);
+      const show = matchSeries && matchSpeaker && matchQ;
+      c.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    count.textContent = visible + ' проповідей';
+  }
+  ['filterSeries','filterSpeaker','searchInput'].forEach(id => {
+    document.getElementById(id).addEventListener('input', filterSermons);
+    document.getElementById(id).addEventListener('change', filterSermons);
+  });
+  // Sermon card click → YouTube
+  cards.forEach(c => c.addEventListener('click', () => {
+    window.open('https://www.youtube.com/channel/UCPdTXPOZU_3nepXF5SRjQgQ','_blank');
+  }));
+</script>
+</body>
+</html>
